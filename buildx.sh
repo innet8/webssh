@@ -8,6 +8,6 @@ LDFLAGS="-w -s -X 'main.version=$VERSION' -X 'main.buildDate=$NOW' -X 'main.goVe
 gox -output="docker/result/webssh_{{.OS}}_{{.Arch}}" -ldflags="$LDFLAGS" -os="linux"
 
 cd docker
-docker buildx build --platform linux/arm64,linux/amd64,linux/arm,linux/386,linux/ppc64le,linux/s390x -t jrohy/webssh:${VERSION} . --push
-docker buildx build --platform linux/arm64,linux/amd64,linux/arm,linux/386,linux/ppc64le,linux/s390x -t jrohy/webssh . --push
-docker buildx build --platform linux/arm64 -t jrohy/webssh:arm64 . --push
+docker buildx build --platform linux/arm64,linux/amd64,linux/arm,linux/386,linux/ppc64le,linux/s390x -t kuaifan/webssh:${VERSION} . --push
+docker buildx build --platform linux/arm64,linux/amd64,linux/arm,linux/386,linux/ppc64le,linux/s390x -t kuaifan/webssh . --push
+docker buildx build --platform linux/arm64 -t kuaifan/webssh:arm64 . --push

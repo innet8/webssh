@@ -6,12 +6,27 @@ import (
 	"fmt"
 	"github.com/gorilla/websocket"
 	"golang.org/x/crypto/ssh"
+	"io/ioutil"
 	"log"
 	"net"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
+
+func fileExist(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil || os.IsExist(err)
+}
+
+func readFile(name string) string {
+	content, err := ioutil.ReadFile(name)
+	if err != nil {
+		os.Exit(1)
+	}
+	return string(content)
+}
 
 // DecodedMsgToSSHClient 字符串信息解析为ssh客户端
 func DecodedMsgToSSHClient(sshInfo string) (SSHClient, error) {
@@ -23,6 +38,10 @@ func DecodedMsgToSSHClient(sshInfo string) (SSHClient, error) {
 	err = json.Unmarshal(decoded, &client)
 	if err != nil {
 		return client, err
+	}
+	if client.PkFile != "" && fileExist(client.PkFile) {
+		client.Password = readFile(client.PkFile)
+		client.LoginType = 1
 	}
 	if strings.Contains(client.IPAddress, ":") && string(client.IPAddress[0]) != "[" {
 		client.IPAddress = "[" + client.IPAddress + "]"
